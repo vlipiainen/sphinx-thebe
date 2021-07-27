@@ -38,16 +38,17 @@ def init_thebe_core(app, env):
 
     # Add core libraries
     opts = {"async": "async"}
-    app.add_js_file(filename="https://unpkg.com/thebelab@latest/lib/index.js", **opts)
+    app.add_javascript(filename="https://unpkg.com/thebelab@latest/lib/index.js")
 
     # Add configuration variables
-    thebe_config = f"""
-        const thebe_selector = "{ app.config.thebe_config['selector'] }"
-        const thebe_selector_input = "{ app.config.thebe_config['selector_input'] }"
-        const thebe_selector_output = "{ app.config.thebe_config['selector_output'] }"
-    """
-    app.add_js_file(None, body=thebe_config)
-    app.add_js_file(filename="sphinx-thebe.js", **opts)
+#    thebe_config = """
+#        const thebe_selector = "{}"
+#        const thebe_selector_input = "{}"
+#        const thebe_selector_output = "{}"
+#    """.format(app.config.thebe_config['selector'], app.config.thebe_config['selector_input'], app.config.thebe_config['selector_output'])
+#    app.add_javascript(None, body=thebe_config)
+    app.add_javascript(filename="extra-js.js")
+    app.add_javascript(filename="sphinx-thebe.js")
 
 
 def update_thebe_context(app, doctree, docname):
@@ -92,30 +93,31 @@ def update_thebe_context(app, doctree, docname):
     org, repo = _split_repo_url(repo_url)
 
     # Update the doctree with some nodes for the thebe configuration
-    thebe_html_config = f"""
+    thebe_html_config = """
     <script type="text/x-thebe-config">
     {{
         requestKernel: true,
         binderOptions: {{
-            repo: "{org}/{repo}",
-            ref: "{branch}",
+            binderUrl: "http://20.82.75.60/",
+            repo: "{}/{}",
+            ref: "{}",
         }},
         codeMirrorConfig: {{
-            theme: "{codemirror_theme}",
-            mode: "{cm_language}"
+            theme: "{}",
+            mode: "{}"
         }},
         kernelOptions: {{
-            kernelName: "{kernel_name}",
-            path: "{path_to_docs}{str(Path(docname).parent)}"
+            kernelName: "{}",
+            path: "{}{}"
         }},
         predefinedOutput: true
     }}
     </script>
-    """
+    """.format(org, repo, branch, codemirror_theme, cm_language, kernel_name, path_to_docs, str(Path(docname).parent))
 
     doctree.append(nodes.raw(text=thebe_html_config, format="html"))
     doctree.append(
-        nodes.raw(text=f"<script>kernelName = '{kernel_name}'</script>", format="html")
+        nodes.raw(text="<script>kernelName = '{}'</script>".format(kernel_name), format="html")
     )
 
 
@@ -125,7 +127,7 @@ def _split_repo_url(url):
         end = url.split("github.com/")[-1]
         org, repo = end.split("/")[:2]
     else:
-        logger.warning(f"Currently Thebe repositories must be on GitHub, got {url}")
+        logger.warning("Currently Thebe repositories must be on GitHub, got {}".format(url))
         org = repo = None
     return org, repo
 
@@ -145,8 +147,8 @@ class ThebeButtonNode(nodes.Element):
     def html(self):
         text = self["text"]
         return (
-            '<button title="{text}" class="thebelab-button thebe-launch-button"'
-            'onclick="initThebe()">{text}</button>'.format(text=text)
+            '<div class=start-thebe-container><button title="{text}" class="thebelab-button thebe-launch-button"'
+            'onclick="initThebe()">{text}</button></div>'.format(text=text)
         )
 
 
@@ -198,10 +200,11 @@ def setup(app):
     # configuration for this tool
     app.add_config_value("thebe_config", {}, "html")
     # override=True in case Jupyter Sphinx has already been loaded
-    app.add_directive("thebe-button", ThebeButton, override=True)
+    app.add_directive("thebe-button", ThebeButton)#, override=True)
 
     # Add relevant code to headers
-    app.add_css_file("sphinx-thebe.css")
+    app.add_stylesheet("sphinx-thebe.css")
+#    app.add_stylesheet("thebe-box.css")
 
     # ThebeButtonNode is the button that activates thebe
     # and is only rendered for the HTML builder
