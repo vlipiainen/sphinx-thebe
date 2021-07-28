@@ -1,28 +1,29 @@
-# sphinx-thebe
+# sphinx-thebe fork
 
-[![Documentation](https://readthedocs.org/projects/sphinx-thebe/badge/?version=latest)](https://sphinx-thebe.readthedocs.io/en/latest/?badge=latest)
-[![PyPI](https://img.shields.io/pypi/v/sphinx-thebe.svg)](https://pypi.org/project/sphinx-thebe)
+This is a fork of the sphinx-thebe project, in an attempt to make it work with aplus
 
-Integrate interactive code blocks into your documentation with Thebelab and Binder.
+Goal of the fork: make it very easy for a teacher to make this work with aplus
 
-See [the sphinx-thebe documentation](https://sphinx-thebe.readthedocs.io/en/latest/) for more details!
+# Changes to shpinx-thebe code
+- Old python and sphinx syntax used on aplus servers / in the testing containers
+  - add_js_file vs add_javascript
+  - add_css_file vs add_stylesheet
+  - ptyhon format strings
+- Changing hardcoded binderhub link
+  - Right now it's just hardcoded again
+- Added div around button to make it stylable
 
-## Install
+# Changes needed in aplus repo
+- Edit the template file (and include it in the sphinx config) to use the javascript
+  - Add the needed javascript files manually to template
+  - Create a file containing the string-form javascript ("extra-js")
+  - Remember to set data-aplus=yes here.
+- Add sphinx-thebe and a path to it into conf.py
 
-To install `sphinx-thebe` first clonse and install it:
-
-```
-pip install sphinx-thebe
-```
-
-Then, add it to your Sphinx site's `conf.py` file:
-
-```
-extensions = [
-    ...
-    "sphinx_thebe"
-    ...
-]
-```
-
-See [the sphinx-thebe documentation](https://sphinx-thebe.readthedocs.io/en/latest/) for more details!
+# Changes I would like
+- Attach button automatically to each box, showing if kernel is active
+- Translate/localize the messages given while launching
+- Using gitlab repository
+- Submitting code
+- Injecting code saved somewhere else (aplus database, browser storage)
+- Adding the data-aplus attribute in the add_js_file function (once that works on aplus servers&docker)
