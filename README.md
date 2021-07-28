@@ -19,6 +19,7 @@ Goal of the fork: make it very easy for a teacher to make this work with aplus
   - Create a file containing the string-form javascript ("extra-js")
   - Remember to set data-aplus=yes here.
 - Add sphinx-thebe and a path to it into conf.py
+- Adding css file to style the button
 
 # Changes I would like
 - Attach button automatically to each box, showing if kernel is active
