@@ -102,7 +102,7 @@ def update_thebe_context(app, doctree, docname):
     {{
         requestKernel: true,
         binderOptions: {{
-            binderUrl: {},
+            binderUrl: "{}",
             repo: "{}/{}",
             ref: "{}",
         }},
