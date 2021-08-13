@@ -84,6 +84,9 @@ def update_thebe_context(app, doctree, docname):
     elif cm_language == "ir":
         cm_language = "r"
 
+    # Get binderUrl from config
+    binder_url = config_thebe.get("binder_url", "https://mybinder.org")
+
     # Create the URL for the kernel request
     repo_url = config_thebe.get(
         "repository_url",
@@ -99,7 +102,7 @@ def update_thebe_context(app, doctree, docname):
     {{
         requestKernel: true,
         binderOptions: {{
-            binderUrl: "https://mybinder.org",
+            binderUrl: {},
             repo: "{}/{}",
             ref: "{}",
         }},
@@ -114,7 +117,7 @@ def update_thebe_context(app, doctree, docname):
         predefinedOutput: true
     }}
     </script>
-    """.format(org, repo, branch, codemirror_theme, cm_language, kernel_name, path_to_docs, str(Path(docname).parent))
+    """.format(binder_url, org, repo, branch, codemirror_theme, cm_language, kernel_name, path_to_docs, str(Path(docname).parent))
 
     doctree.append(nodes.raw(text=thebe_html_config, format="html"))
     doctree.append(
