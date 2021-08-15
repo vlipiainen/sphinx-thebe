@@ -37,7 +37,7 @@ def init_thebe_core(app, env):
         return
 
     # Add core libraries
-    opts = {"async": "async"}
+    opts = {"async": "async", "data-aplus": "yes"}
     app.add_js_file(filename="https://unpkg.com/thebelab@latest/lib/index.js", **opts)
 
     # Add configuration variables
@@ -46,7 +46,7 @@ def init_thebe_core(app, env):
         const thebe_selector_input = "{ app.config.thebe_config['selector_input'] }"
         const thebe_selector_output = "{ app.config.thebe_config['selector_output'] }"
     """
-    app.add_js_file(None, body=thebe_config)
+    app.add_js_file(None, body=thebe_config, **opts)
     app.add_js_file(filename="sphinx-thebe.js", **opts)
 
 
@@ -201,7 +201,8 @@ def setup(app):
     app.add_directive("thebe-button", ThebeButton, override=True)
 
     # Add relevant code to headers
-    app.add_css_file("sphinx-thebe.css")
+    opts = {'data-aplus': 'yes'}
+    app.add_css_file("sphinx-thebe.css", **opts)
 
     # ThebeButtonNode is the button that activates thebe
     # and is only rendered for the HTML builder
