@@ -82,6 +82,12 @@ def update_thebe_context(app, doctree, docname):
     elif cm_language == "ir":
         cm_language = "r"
 
+    # Get url for binderhub server
+    binder_url = config_thebe.get(
+        "binderUrl",
+        "https://mybinder.org"
+    )
+
     # Create the URL for the kernel request
     repo_url = config_thebe.get(
         "repository_url",
@@ -97,6 +103,7 @@ def update_thebe_context(app, doctree, docname):
     {{
         requestKernel: true,
         binderOptions: {{
+            binderUrl: "{binder_url}",
             repo: "{org}/{repo}",
             ref: "{branch}",
         }},
