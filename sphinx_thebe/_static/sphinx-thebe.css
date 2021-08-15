@@ -1,4 +1,19 @@
 /* Thebelab Buttons */
+.thebe-button-container {
+  width: 100%;
+  padding: 20pt;
+  margin-bottom: 5pt;
+  margin-top: 5pt;
+  background-color: #dff0d8;
+  border-style: solid;
+  border-color: #3a6727;
+  text-align: center
+}
+
+.thebe-button-container button {
+  background-color: white
+}
+
 .thebelab-button {
     z-index: 999;
     display: inline-block;
